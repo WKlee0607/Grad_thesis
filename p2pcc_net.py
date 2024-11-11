@@ -23,8 +23,8 @@ class Generator(nn.Module):
         super(Generator, self).__init__()
         
         #----------------------------------------------------------------------        
-        input_ch = opt.input_ch
-        output_ch = opt.target_ch
+        input_ch = 3
+        output_ch = 1
         n_gf = opt.n_gf
         norm = get_norm_layer(opt.norm_type)
         act = Mish()
@@ -97,17 +97,7 @@ class PatchDiscriminator(nn.Module):
         super(PatchDiscriminator, self).__init__()
         
         #----------------------------------------------------------------------
-        if opt.ch_balance > 0:
-            ch_ratio = np.float(opt.input_ch)/np.float(opt.target_ch)
-            ch_ratio *= opt.ch_balance
-            if ch_ratio > 1:
-                input_channel = opt.input_ch + opt.target_ch*np.int(ch_ratio)                            
-            elif ch_ratio < 1:
-                input_channel = opt.input_ch*np.int(1/ch_ratio) + opt.target_ch
-            else:
-                input_channel = opt.input_ch + opt.target_ch
-        else:
-            input_channel = opt.input_ch + opt.target_ch
+        input_channel = 4 # input_ch(3) + output_ch(1) = 4
         
         #----------------------------------------------------------------------
         act = nn.LeakyReLU(0.2, inplace=True)
